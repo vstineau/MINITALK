@@ -6,7 +6,7 @@
 /*   By: vstineau <vstineau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:40:44 by vstineau          #+#    #+#             */
-/*   Updated: 2024/02/22 17:19:48 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/02/22 17:40:24 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	handler(int signum, siginfo_t *info, void *context)
 {
 	ft_printf("signal recu par le client");
 	exit(0);
+}
+
+int	*send_message(int pid, char *message)
+{
 }
 
 int	main(int argc, char *argv[])
