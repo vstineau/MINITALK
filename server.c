@@ -6,7 +6,7 @@
 /*   By: vstineau <vstineau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:40:17 by vstineau          #+#    #+#             */
-/*   Updated: 2024/02/23 17:01:09 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:20:19 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,31 @@ typedef struct s_bit
 
 static	t_bit	g_bit;
 
-void	handler(int signum, siginfo_t *info, void *context)
+void	get_bit(int signal)
 {
-	ft_printf("signal recu par le server");
-	exit(0);
-}
-
-void	get_signal(int signal)
-{
-	char	*string;
-
-	string = NULL;
 	if (signal == SIGUSR1)
 		g_bit.bit_received = 1;
 	else
 		g_bit.bit_received = 0;
-	if (g_bit.bit_index == 8)
-		g_bit.bit_index = 0;
-	g_bit.char_received = (g_bit.char_received << 1) | g_bit.bit_received;
+	g_bit.char_received = g_bit.char_received | (g_bit.bit_received << g_bit.bit_index);
 	g_bit.bit_index++;
 	if (g_bit.bit_index == 8)
-		string = init_string(string, g_bit.char_received);
+	{
+		g_bit.bit_index = 0;
+		write(1, &g_bit.char_received, 1);
+		if (g_bit.char_received == 0)
+			;
+		g_bit.char_received = 0;
+	}
+}
+
+void	handler(int signum, siginfo_t *info, void *context)
+{
+	(void)signum;
+	(void)info;
+	(void)context;
+	get_bit(signum);
+	kill(info->si_pid, SIGUSR1);
 }
 
 int	main(void)
@@ -58,10 +62,8 @@ int	main(void)
 	sa.sa_flags = SA_SIGINFO;
 	ft_printf("%d\n", getpid());
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1)
-	{
-		ft_putstr_fd("Erreur lors de l'instalation du gestionnaire de signal", 2);
 		return (1);
-	}
-	pause();
+	while (1)
+		pause();
 	return (0);
 }

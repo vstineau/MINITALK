@@ -6,7 +6,7 @@
 /*   By: vstineau <vstineau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:40:44 by vstineau          #+#    #+#             */
-/*   Updated: 2024/02/23 15:33:39 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:29:28 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,28 +17,34 @@
 #include <stdio.h>
 #include "LIBFT/libft.h"
 
-void	handler(int signum, siginfo_t *info, void *context)
+typedef struct s_bit
 {
-	ft_printf("signal recu par le client");
+	int		bit_send;
+	char	*str;
+	int		bit_index;
+	pid_t	pid;
+}					t_bit;
 
-	exit(0);
-}
+static t_bit	g_send;
 
-void	send_message(int server_pid, char c)
+void	send_bit(int server_pid, char c)
 {
-	int	i;
 	int	bit;
 
-	i = 8;
-	while (i-- > 0)
-	{
-		bit = (c >> i) & 1;
+		bit = (c >> (g_send.bit_index % 8)) & 1;
 		if (bit == 1)
 			kill(server_pid, SIGUSR1);
 		else
 			kill(server_pid, SIGUSR2);
-		pause();
-	}
+}
+
+void	send_string(int signum, siginfo_t *info, void *context)
+{
+	(void)signum;
+	(void)info;
+	(void)context;
+	send_bit(g_send.pid, g_send.str[g_send.bit_index / 8]);
+	g_send.bit_index++;
 }
 
 int	main(int argc, char *argv[])
@@ -47,17 +53,17 @@ int	main(int argc, char *argv[])
 	int	i;
 
 	sigemptyset(&sa.sa_mask);
-	sa.sa_sigaction = handler;
+	sa.sa_sigaction = send_string;
 	sa.sa_flags = SA_SIGINFO;
 	if (argc != 3)
 		return (1);
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1)
-	{
-		ft_putstr_fd("Erreur lors de l'instalation du gestionnaire de signal", 2);
 		return (1);
-	}
 	i = 0;
-	while (argv[2][i])
-		send_message(ft_atoi(argv[1]), argv[2][i++]);
+	g_send.pid = (pid_t)ft_atoi(argv[1]);
+	g_send.str = ft_strdup(argv[2]);
+	send_string(0, NULL, NULL);
+	while (g_send.bit_index < (int)(ft_strlen(g_send.str) + 1) * 8)
+		pause();
 	return (0);
 }

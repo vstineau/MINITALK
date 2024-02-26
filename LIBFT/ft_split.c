@@ -6,7 +6,7 @@
 /*   By: vstineau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 13:43:42 by vstineau          #+#    #+#             */
-/*   Updated: 2024/02/01 14:35:13 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/02/26 12:00:43 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static	int	fill_words(char const *s, char c, char **split, size_t count)
 		j = 0;
 		while (s[i] != c && s[i])
 			split[k][j++] = s[i++];
-		k++; 
+		k++;
 	}
 	return (1);
 }

@@ -6,7 +6,7 @@
 #    By: vstineau <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/27 16:48:17 by vstineau          #+#    #+#              #
-#    Updated: 2024/02/21 14:46:19 by vstineau         ###   ########.fr        #
+#    Updated: 2024/02/26 15:51:42 by vstineau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
 
 $(NAME2): $(OBJS2) $(LIBFT)
-	$$(CC) $(CFLAGS) -o $(NAME) $(OBJS2) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME2) $(OBJS2) $(LIBFT)
 
 $(LIBFT):
 	$(MAKE) -C LIBFT
