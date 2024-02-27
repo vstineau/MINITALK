@@ -6,7 +6,7 @@
 /*   By: vstineau <vstineau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:40:17 by vstineau          #+#    #+#             */
-/*   Updated: 2024/02/26 16:20:19 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/02/27 15:32:52 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,9 @@ typedef struct s_bit
 {
 	int		bit_received;
 	char	char_received;
+	char	*str;
 	int		bit_index;
+	int		str_len;
 }					t_bit;
 
 static	t_bit	g_bit;
@@ -37,9 +39,16 @@ void	get_bit(int signal)
 	if (g_bit.bit_index == 8)
 	{
 		g_bit.bit_index = 0;
-		write(1, &g_bit.char_received, 1);
+		g_bit.str = ft_realloc(g_bit.str, g_bit.str_len, (g_bit.str_len + 1));
+		g_bit.str[g_bit.str_len - 1] = g_bit.char_received;
+		g_bit.str_len = (int)ft_strlen(g_bit.str);
 		if (g_bit.char_received == 0)
-			;
+		{
+			write(1, g_bit.str, g_bit.str_len);
+			free(g_bit.str);
+			g_bit.str = NULL;
+			g_bit.str_len = 1;
+		}
 		g_bit.char_received = 0;
 	}
 }
@@ -60,6 +69,7 @@ int	main(void)
 	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = handler;
 	sa.sa_flags = SA_SIGINFO;
+	g_bit.str_len = 1;
 	ft_printf("%d\n", getpid());
 	if (sigaction(SIGUSR1, &sa, NULL) == -1 || sigaction(SIGUSR2, &sa, NULL) == -1)
 		return (1);

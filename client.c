@@ -6,7 +6,7 @@
 /*   By: vstineau <vstineau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:40:44 by vstineau          #+#    #+#             */
-/*   Updated: 2024/02/26 16:29:28 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/02/27 12:08:39 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ int	main(int argc, char *argv[])
 	send_string(0, NULL, NULL);
 	while (g_send.bit_index < (int)(ft_strlen(g_send.str) + 1) * 8)
 		pause();
+	free(g_send.str);
 	return (0);
 }

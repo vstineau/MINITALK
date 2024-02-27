@@ -6,7 +6,7 @@
 /*   By: vstineau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/06 11:32:36 by vstineau          #+#    #+#             */
-/*   Updated: 2023/11/16 11:20:47 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/02/27 11:51:35 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -21,6 +21,21 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 	while ((unsigned char)s1[i] && (unsigned char)s2[i] && i < n -1)
 	{
 		if ((unsigned char)s1[i] == (unsigned char)s2[i])
+			i++;
+		else
+			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] && s2[i])
+	{
+		if (s1[i] == s2[i])
 			i++;
 		else
 			return ((unsigned char)s1[i] - (unsigned char)s2[i]);
