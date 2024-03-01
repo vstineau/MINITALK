@@ -6,7 +6,7 @@
 /*   By: vstineau <vstineau@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/01 13:40:44 by vstineau          #+#    #+#             */
-/*   Updated: 2024/02/28 11:44:05 by vstineau         ###   ########.fr       */
+/*   Updated: 2024/03/01 14:22:24 by vstineau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	send_string(int signum, siginfo_t *info, void *context)
 	(void)signum;
 	(void)info;
 	(void)context;
-	if (g_send.bit_index <= (int)(ft_strlen(g_send.str) + 1) *8)
+	if (g_send.bit_index < (int)(ft_strlen(g_send.str) + 1) *8)
 	{
 		send_bit(g_send.pid, g_send.str[g_send.bit_index / 8]);
 		g_send.bit_index++;
